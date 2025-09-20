@@ -1,0 +1,29 @@
+{
+  "id": "payment-callback-success",
+  "name": "Payment Callback Success",
+  "request": {
+    "method": "POST",
+    "urlPath": "/payment/callback",
+    "headers": {
+      "Content-Type": {
+        "matches": "application/json.*"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Callback-Source": "MockBank"
+    },
+    "jsonBody": {
+      "status": "SUCCESS",
+      "message": "Payment processed successfully",
+      "transactionId": "{{jsonPath request.body '$.transactionId'}}",
+      "amount": "{{jsonPath request.body '$.amount'}}",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}",
+      "processingTime": "{{randomInt lower=100 upper=5000}}ms"
+    },
+    "transformers": ["response-template"]
+  }
+}

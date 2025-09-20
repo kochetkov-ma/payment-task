@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: payment-e2e-tests
+
+logging:
+  level:
+    com.payment.e2e: DEBUG
+    org.testcontainers: INFO
+    io.restassured: DEBUG
+
+# Test configuration
+test:
+  payment-backend:
+    base-url: http://localhost:8080
+  payment-balance-service:
+    base-url: http://localhost:8081

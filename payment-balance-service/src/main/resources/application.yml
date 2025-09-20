@@ -1,0 +1,77 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: payment-balance-service
+
+  datasource:
+    url: jdbc:postgresql://postgres:5432/balance_db
+    username: balance_user
+    password: balance_password
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: kafka:29092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+    consumer:
+      group-id: balance-service-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      auto-offset-reset: latest
+      properties:
+        spring.json.trusted.packages: "*"
+        spring.json.type.mapping: "com.payment.backend.dto.kafka.HoldRequest:com.payment.balance.dto.kafka.HoldRequest"
+        spring.json.use.type.headers: false
+
+kafka:
+  topics:
+    payment-hold-request: payment-hold-request
+    payment-hold-response: payment-hold-response
+
+payment:
+  backend:
+    url: http://payment-backend:8080
+
+logging:
+  level:
+    com.payment.balance: INFO
+
+---
+spring:
+  config:
+    activate:
+      on-profile: docker
+  datasource:
+    url: jdbc:postgresql://postgres:5432/balance_db
+    username: balance_user
+    password: balance_password
+  kafka:
+    bootstrap-servers: kafka:29092
+    consumer:
+      auto-offset-reset: latest
+
+kafka:
+  topics:
+    payment-hold-request: payment-hold-request
+    payment-hold-response: payment-hold-response
+
+payment:
+  backend:
+    url: http://payment-backend:8080
+
+logging:
+  level:
+    root: INFO
+    com.payment: DEBUG

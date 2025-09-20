@@ -1,0 +1,21 @@
+{
+  "id": "health-check",
+  "name": "Health Check Endpoint",
+  "request": {
+    "method": "GET",
+    "urlPath": "/health"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": {
+      "status": "UP",
+      "service": "WireMock Payment Simulator",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}",
+      "version": "1.0.0"
+    },
+    "transformers": ["response-template"]
+  }
+}

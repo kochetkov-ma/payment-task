@@ -1,0 +1,30 @@
+{
+  "id": "payment-callback-failure",
+  "name": "Payment Callback Failure",
+  "request": {
+    "method": "POST",
+    "urlPath": "/payment/callback/failure",
+    "headers": {
+      "Content-Type": {
+        "matches": "application/json.*"
+      }
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json",
+      "X-Callback-Source": "MockBank"
+    },
+    "jsonBody": {
+      "status": "FAILED",
+      "message": "Payment processing failed",
+      "errorCode": "INSUFFICIENT_FUNDS",
+      "transactionId": "{{jsonPath request.body '$.transactionId'}}",
+      "amount": "{{jsonPath request.body '$.amount'}}",
+      "timestamp": "{{now format='yyyy-MM-dd HH:mm:ss'}}",
+      "processingTime": "{{randomInt lower=100 upper=3000}}ms"
+    },
+    "transformers": ["response-template"]
+  }
+}
